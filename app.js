@@ -25,8 +25,7 @@ function renderTeams(res) {
   return res.teams.map((t) => `
     <div class="row">${rankCell(t.rank)}
       <div><div class="name">${esc(t.name)}${t.solo ? '<span class="tag">單人</span>' : ''}</div>
-        <div class="sub">${t.breakdown.map((b) => `${esc(b.name)} ${b.total}${b.active ? '' : '（已離隊）'}`).join(' ・ ')}</div>
-        ${t.restaurant ? `<div class="sub">🍴 贏了吃 ${esc(t.restaurant)}</div>` : ''}</div>
+        <div class="sub">${t.breakdown.map((b) => `${esc(b.name)} ${b.total}${b.active ? '' : '（已離隊）'}`).join(' ・ ')}</div></div>
       <div class="score">${t.score}<small> 分</small></div>
     </div>`).join('');
 }

@@ -135,7 +135,7 @@ export function compute({ players, teams, scores, settings }) {
       warnings.push(`隊伍「${t['隊名']}」兩位成員同部門（${depts[0]}），不符合組隊規定`);
     }
     return {
-      name: t['隊名'], restaurant: t['餐廳'], members, solo: members.length === 1,
+      name: t['隊名'], members, solo: members.length === 1,
       score: everyone.reduce((a, p) => a + p.total, 0),
       breakdown: everyone.map((p) => ({ name: p.name, total: p.total, active: members.includes(p.name) })),
     };
