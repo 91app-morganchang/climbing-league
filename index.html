@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>攀岩社季度排位賽</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🧗 攀岩社季度排位賽</h1>
+  <p id="meta" class="muted">載入中…</p>
+</header>
+
+<nav role="tablist" aria-label="排行榜">
+  <button role="tab" aria-selected="true" data-tab="teams">隊伍榜</button>
+  <button role="tab" aria-selected="false" data-tab="rookies">最強新人</button>
+  <button role="tab" aria-selected="false" data-tab="players">個人榜</button>
+</nav>
+
+<main>
+  <section id="teams" class="panel"></section>
+  <section id="rookies" class="panel" hidden></section>
+  <section id="players" class="panel" hidden></section>
+  <details id="warnings" hidden>
+    <summary></summary>
+    <ul></ul>
+  </details>
+</main>
+
+<footer class="muted">
+  計分：V0=1 分、V1=2 分，依此類推；每人每次活動取當天最高；同分並列。
+</footer>
+<script type="module" src="app.js"></script>
+</body>
+</html>

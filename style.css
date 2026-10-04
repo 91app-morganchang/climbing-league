@@ -1,0 +1,43 @@
+:root {
+  --bg: #f6f7f9; --card: #fff; --text: #1c2430; --muted: #6b7482; --line: #e4e7ec;
+  --accent: #e8590c; --gold: #f5b301; --silver: #9aa3af; --bronze: #c2763b; --warn: #b45309; --warn-bg: #fef3c7;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14181f; --card: #1c222c; --text: #e8ecf2; --muted: #98a2b3; --line: #2c3340;
+    --warn: #fbbf24; --warn-bg: #3a2f10;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  max-width: 720px; margin-inline: auto; padding: 0 16px 40px;
+}
+header { padding: 24px 0 8px; }
+h1 { margin: 0; font-size: 1.5rem; }
+.muted { color: var(--muted); font-size: .875rem; margin: 4px 0 0; }
+nav { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin: 12px 0 16px; }
+nav button {
+  flex: 1; padding: 10px 4px; background: none; border: 0; border-bottom: 3px solid transparent;
+  color: var(--muted); font: inherit; font-weight: 600; cursor: pointer;
+}
+nav button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.row {
+  display: grid; grid-template-columns: 2.4rem 1fr auto; gap: 12px; align-items: center;
+  background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+}
+.rank { font-size: 1.25rem; font-weight: 700; text-align: center; color: var(--muted); }
+.rank.r1 { color: var(--gold); } .rank.r2 { color: var(--silver); } .rank.r3 { color: var(--bronze); }
+.name { font-weight: 600; }
+.sub { color: var(--muted); font-size: .8125rem; }
+.score { font-size: 1.375rem; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+.score small { font-size: .75rem; color: var(--muted); font-weight: 400; }
+.tag { display: inline-block; font-size: .6875rem; padding: 1px 6px; border-radius: 999px; background: var(--line); color: var(--muted); margin-left: 6px; vertical-align: middle; }
+.tag.new { background: #d3f9d8; color: #2b8a3e; }
+.empty { text-align: center; color: var(--muted); padding: 32px 0; }
+.note { color: var(--muted); font-size: .8125rem; margin: 0 0 12px; }
+details { margin-top: 24px; background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 14px; font-size: .875rem; }
+details summary { cursor: pointer; font-weight: 600; }
+details ul { margin: 8px 0 0; padding-left: 20px; }
+footer { margin-top: 24px; text-align: center; }
