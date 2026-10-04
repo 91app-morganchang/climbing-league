@@ -127,7 +127,8 @@ export function compute({ players, teams, scores, settings }) {
   // 隊伍：以選手的「隊名」彙總 → 換夥伴後，離隊者積分仍保留
   const teamList = teams.filter((t) => t['隊名']).map((t) => {
     const members = [t['成員1'], t['成員2']].filter(Boolean);
-    const everyone = [...playerMap.values()].filter((p) => p.team === t['隊名']);
+    // 現任成員（隊伍頁填的）＋ 隊名欄標示屬於此隊的選手（含已離隊者，積分保留）
+    const everyone = [...playerMap.values()].filter((p) => members.includes(p.name) || p.team === t['隊名']);
     for (const m of members) if (!playerMap.has(m)) warnings.push(`隊伍「${t['隊名']}」成員「${m}」不在選手名單`);
     const depts = members.map((m) => playerMap.get(m)?.dept).filter(Boolean);
     if (members.length === 2 && depts.length === 2 && depts[0] === depts[1]) {
