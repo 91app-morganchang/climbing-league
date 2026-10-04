@@ -2,7 +2,7 @@
 
 export const LEVEL_POINTS = (level) => {
   const m = /^V(\d{1,2})$/i.exec(String(level).trim());
-  return m ? Number(m[1]) + 1 : null; // V0=1, V1=2 ...
+  return m ? Number(m[1]) : null; // V0=0, V1=1 ...
 };
 
 /** 解析 CSV（支援引號、逗號、換行），回傳物件陣列（以首列為欄名）。 */
