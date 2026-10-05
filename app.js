@@ -30,14 +30,27 @@ function renderTeams(res) {
     </div>`).join('');
 }
 
+const thisMonth = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; };
+let rookieSel = null;
+
 function renderRookies(res) {
-  if (!res.rookies.length) return '<p class="empty">還沒有新人</p>';
-  return '<p class="note">依「單月最高積分」排名；括號為各月積分。</p>' + res.rookies.map((p) => `
+  if (!res.rookieMonths.length) return '<p class="empty">還沒有成績</p>';
+  const cur = thisMonth();
+  const sel = res.rookieMonths.find((m) => m.month === rookieSel) ?? res.rookieMonths.at(-1);
+  const label = (m) => `${+m.month.slice(5)}月`;
+  const chips = res.rookieMonths.map((m) => `
+    <button class="chip" data-month="${m.month}" aria-pressed="${m === sel}">${label(m)}${m.month === cur ? ' ・進行中' : ''}</button>`).join('');
+  const champs = res.rookieMonths.filter((m) => m.champions.length && m.month !== cur)
+    .map((m) => `${label(m)}：${m.champions.map(esc).join('、')}`).join('　');
+  const rows = sel.ranking.length ? sel.ranking.map((p) => `
     <div class="row">${rankCell(p.rank)}
-      <div><div class="name">${esc(p.name)}<span class="tag new">新人</span></div>
-        <div class="sub">${Object.entries(p.months).map(([m, v]) => `${+m.slice(5)}月 ${v}`).join(' ・ ') || '尚無成績'}</div></div>
-      <div class="score">${p.bestMonth}<small> 分</small></div>
-    </div>`).join('');
+      <div><div class="name">${esc(p.name)}<span class="tag new">新人</span>${p.rank === 1 ? `<span class="tag win">${sel.month === cur ? '目前領先' : '🏆 當月冠軍'}</span>` : ''}</div>
+        <div class="sub">${esc(p.dept)}</div></div>
+      <div class="score">${p.points}<small> 分</small></div>
+    </div>`).join('') : '<p class="empty">這個月還沒有新人得分</p>';
+  return `<p class="note">每月選出一位新人冠軍（當月積分最高、同分並列）。</p>
+    ${champs ? `<p class="note">🏆 ${champs}</p>` : ''}
+    <div class="chips">${chips}</div>${rows}`;
 }
 
 function renderPlayers(res) {
@@ -67,5 +80,13 @@ document.querySelectorAll('nav button').forEach((b) => b.addEventListener('click
   document.querySelectorAll('.panel').forEach((p) => (p.hidden = p.id !== b.dataset.tab));
 }));
 
-load().then(({ live, data }) => show(compute(data), live))
+$('#rookies').addEventListener('click', (e) => {
+  const b = e.target.closest('.chip');
+  if (!b || !lastResult) return;
+  rookieSel = b.dataset.month;
+  $('#rookies').innerHTML = renderRookies(lastResult);
+});
+
+let lastResult = null;
+load().then(({ live, data }) => show((lastResult = compute(data)), live))
   .catch((e) => { $('#meta').textContent = '資料載入失敗：' + e.message; });

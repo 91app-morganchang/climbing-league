@@ -145,11 +145,21 @@ export function compute({ players, teams, scores, settings }) {
   }
 
   const playerList = [...playerMap.values()].map(({ days, ...p }) => p);
+  const months = [...new Set(records.map((r) => r.month))].sort();
+  // 最強新人：每個月各一份榜單；當月最高且 > 0 分者為冠軍（同分並列皆為冠軍）
+  const rookieList = playerList.filter((p) => p.rookie);
+  const rookieMonths = months.map((month) => {
+    const ranking = rankBy(
+      rookieList.map((p) => ({ name: p.name, dept: p.dept, points: p.months[month] ?? 0 })).filter((r) => r.points > 0),
+      'points',
+    );
+    return { month, ranking, champions: ranking.filter((r) => r.rank === 1).map((r) => r.name) };
+  });
   return {
     teams: rankBy(teamList, 'score'),
-    rookies: rankBy(playerList.filter((p) => p.rookie).map((p) => ({ ...p })), 'bestMonth'),
+    rookieMonths,
     players: rankBy(playerList.map((p) => ({ ...p })), 'total'),
-    months: [...new Set(records.map((r) => r.month))].sort(),
+    months,
     cutoff: cutoff ? dateKey(cutoff) : null,
     warnings,
   };

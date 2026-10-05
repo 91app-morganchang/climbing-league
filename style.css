@@ -41,3 +41,7 @@ details { margin-top: 24px; background: var(--warn-bg); color: var(--warn); bord
 details summary { cursor: pointer; font-weight: 600; }
 details ul { margin: 8px 0 0; padding-left: 20px; }
 footer { margin-top: 24px; text-align: center; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+.chip { padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text); font: inherit; font-size: .875rem; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.tag.win { background: #fff3bf; color: #b45309; }

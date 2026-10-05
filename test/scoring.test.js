@@ -61,11 +61,28 @@ test('單人不平均，直接累計', () => {
   assert.equal(team(r, '單挑王').solo, true);
 });
 
-test('新人：首次參加日在起算日之後；以單月最高排名', () => {
-  const r = run([S('2026-10-10', '小華', 'V2'), S('2026-10-24', '小華', 'V4'), S('2026-11-07', '阿強', 'V5'), S('2026-10-10', '小明', 'V9')]);
-  assert.deepEqual(r.rookies.map((p) => p.name), ['小華', '阿強']);
-  assert.equal(r.rookies[0].bestMonth, 2 + 4);
-  assert.ok(!r.rookies.some((p) => p.name === '小明'));
+const month = (r, m) => r.rookieMonths.find((x) => x.month === m);
+
+test('新人：每月各選一位冠軍，只有新人參賽', () => {
+  const r = run([S('2026-10-10', '小華', 'V2'), S('2026-10-24', '小華', 'V4'), S('2026-10-10', '阿強', 'V3'),
+    S('2026-11-07', '阿強', 'V5'), S('2026-10-10', '小明', 'V9')]);
+  assert.deepEqual(r.rookieMonths.map((m) => m.month), ['2026-10', '2026-11']);
+  assert.deepEqual(month(r, '2026-10').champions, ['小華']); // 2+4=6 > 阿強 3
+  assert.equal(month(r, '2026-10').ranking[0].points, 6);
+  assert.deepEqual(month(r, '2026-11').champions, ['阿強']);
+  assert.ok(!r.rookieMonths.some((m) => m.ranking.some((p) => p.name === '小明'))); // 小明非新人
+});
+
+test('新人：每月積分各自計算，不跨月累計', () => {
+  const r = run([S('2026-10-10', '小華', 'V5'), S('2026-11-07', '小華', 'V1'), S('2026-11-07', '阿強', 'V2')]);
+  assert.deepEqual(month(r, '2026-11').champions, ['阿強']); // 小華 11 月只有 1 分
+});
+
+test('新人：同分並列冠軍；0 分不算冠軍', () => {
+  const tie = run([S('2026-10-10', '小華', 'V3'), S('2026-10-10', '阿強', 'V3')]);
+  assert.deepEqual(month(tie, '2026-10').champions.sort(), ['小華', '阿強'].sort());
+  const zero = run([S('2026-10-10', '小華', 'V0')]);
+  assert.deepEqual(month(zero, '2026-10').champions, []);
 });
 
 test('換夥伴：離隊者積分保留在隊上', () => {
