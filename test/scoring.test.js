@@ -19,8 +19,10 @@ const run = (scores, settings = { 結算截止日期: '2026-12-31', 新人起算
   compute({ players, teams, scores, settings });
 const team = (r, n) => r.teams.find((t) => t.name === n);
 
-test('V0=0 分，V3=3 分', () => {
-  assert.equal(team(run([S('2026-10-10', '阿強', 'V0')]), '單挑王').score, 0);
+test('V0=0.5 分，V1=1 分，V3=3 分', () => {
+  assert.equal(team(run([S('2026-10-10', '阿強', 'V0')]), '單挑王').score, 0.5);
+  assert.equal(team(run([S('2026-10-10', '阿強', 'V1')]), '單挑王').score, 1);
+  assert.equal(team(run([S('2026-10-10', '阿強', 'V0'), S('2026-10-24', '阿強', 'V0')]), '單挑王').score, 1); // 0.5 + 0.5
   assert.equal(team(run([S('2026-10-10', '阿強', 'V3')]), '單挑王').score, 3);
 });
 
@@ -78,11 +80,11 @@ test('新人：每月積分各自計算，不跨月累計', () => {
   assert.deepEqual(month(r, '2026-11').champions, ['阿強']); // 小華 11 月只有 1 分
 });
 
-test('新人：同分並列冠軍；0 分不算冠軍', () => {
+test('新人：同分並列冠軍；V0 也有 0.5 分可得冠軍', () => {
   const tie = run([S('2026-10-10', '小華', 'V3'), S('2026-10-10', '阿強', 'V3')]);
   assert.deepEqual(month(tie, '2026-10').champions.sort(), ['小華', '阿強'].sort());
-  const zero = run([S('2026-10-10', '小華', 'V0')]);
-  assert.deepEqual(month(zero, '2026-10').champions, []);
+  const low = run([S('2026-10-10', '小華', 'V0')]);
+  assert.deepEqual(month(low, '2026-10').champions, ['小華']);
 });
 
 test('換夥伴：離隊者積分保留在隊上', () => {
