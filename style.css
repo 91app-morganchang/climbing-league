@@ -37,11 +37,22 @@ nav button[aria-selected="true"] { color: var(--accent); border-bottom-color: va
 .tag.new { background: #d3f9d8; color: #2b8a3e; }
 .empty { text-align: center; color: var(--muted); padding: 32px 0; }
 .note { color: var(--muted); font-size: .8125rem; margin: 0 0 12px; }
-details { margin-top: 24px; background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 14px; font-size: .875rem; }
-details summary { cursor: pointer; font-weight: 600; }
-details ul { margin: 8px 0 0; padding-left: 20px; }
+#warnings { margin-top: 24px; background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 14px; font-size: .875rem; }
+#warnings summary { cursor: pointer; font-weight: 600; }
+#warnings ul { margin: 8px 0 0; padding-left: 20px; }
 footer { margin-top: 24px; text-align: center; }
 .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
 .chip { padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--text); font: inherit; font-size: .875rem; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 .tag.win { background: #fff3bf; color: #b45309; }
+.player { margin-bottom: 8px; }
+.player > summary { list-style: none; cursor: pointer; margin-bottom: 0; }
+.player > summary::-webkit-details-marker { display: none; }
+.player[open] > summary { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.player .detail { background: var(--card); border: 1px solid var(--line); border-top: 0; border-radius: 0 0 12px 12px; padding: 4px 14px 12px; }
+.hist { width: 100%; border-collapse: collapse; font-size: .875rem; font-variant-numeric: tabular-nums; }
+.hist th, .hist td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--line); }
+.hist th { color: var(--muted); font-weight: 600; font-size: .75rem; }
+.hist td:last-child, .hist th:last-child { text-align: right; }
+.detail .note { margin: 8px 0 0; }
+.empty.small { padding: 12px 0; }

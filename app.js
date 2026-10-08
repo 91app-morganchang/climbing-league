@@ -53,13 +53,26 @@ function renderRookies(res) {
     <div class="chips">${chips}</div>${rows}`;
 }
 
+const md = (d) => `${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
+
+function renderHistory(p) {
+  if (!p.history.length) return '<p class="empty small">還沒有成績紀錄</p>';
+  const months = Object.entries(p.months).map(([m, v]) => `${+m.slice(5)} 月 ${v} 分`).join(' ・ ');
+  return `<table class="hist"><thead><tr><th>日期</th><th>等級</th><th>積分</th></tr></thead><tbody>
+    ${p.history.map((h) => `<tr><td>${md(h.date)}</td><td>${esc(h.level)}</td><td>${h.pts}</td></tr>`).join('')}
+    </tbody></table><p class="note">各月小計：${months}</p>`;
+}
+
 function renderPlayers(res) {
   return res.players.map((p) => `
-    <div class="row">${rankCell(p.rank)}
-      <div><div class="name">${esc(p.name)}${p.rookie ? '<span class="tag new">新人</span>' : ''}</div>
-        <div class="sub">${esc(p.dept)}${p.team ? ' ・ ' + esc(p.team) : ''} ・ 參與 ${p.entries} 次${p.history.length ? ' ・ ' + p.history.map((h) => h.level).join(' ') : ''}</div></div>
-      <div class="score">${p.total}<small> 分</small></div>
-    </div>`).join('') || '<p class="empty">還沒有選手</p>';
+    <details class="player">
+      <summary class="row">${rankCell(p.rank)}
+        <div><div class="name">${esc(p.name)}${p.rookie ? '<span class="tag new">新人</span>' : ''}</div>
+          <div class="sub">${esc(p.dept)}${p.team ? ' ・ ' + esc(p.team) : ''} ・ 參與 ${p.entries} 次</div></div>
+        <div class="score">${p.total}<small> 分</small></div>
+      </summary>
+      <div class="detail">${renderHistory(p)}</div>
+    </details>`).join('') || '<p class="empty">還沒有選手</p>';
 }
 
 function show(res, live) {
