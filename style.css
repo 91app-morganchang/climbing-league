@@ -56,3 +56,6 @@ footer { margin-top: 24px; text-align: center; }
 .hist td:last-child, .hist th:last-child { text-align: right; }
 .detail .note { margin: 8px 0 0; }
 .empty.small { padding: 12px 0; }
+.hist a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.hist a:hover { text-decoration: underline; }
+.hist td:nth-last-child(2), .hist th:nth-last-child(2) { text-align: center; }

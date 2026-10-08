@@ -58,8 +58,9 @@ const md = (d) => `${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
 function renderHistory(p) {
   if (!p.history.length) return '<p class="empty small">還沒有成績紀錄</p>';
   const months = Object.entries(p.months).map(([m, v]) => `${+m.slice(5)} 月 ${v} 分`).join(' ・ ');
-  return `<table class="hist"><thead><tr><th>日期</th><th>等級</th><th>積分</th></tr></thead><tbody>
-    ${p.history.map((h) => `<tr><td>${md(h.date)}</td><td>${esc(h.level)}</td><td>${h.pts}</td></tr>`).join('')}
+  const photo = (h) => (h.link ? `<a href="${esc(h.link)}" target="_blank" rel="noopener noreferrer">查看</a>` : '–');
+  return `<table class="hist"><thead><tr><th>日期</th><th>等級</th><th>照片</th><th>積分</th></tr></thead><tbody>
+    ${p.history.map((h) => `<tr><td>${md(h.date)}</td><td>${esc(h.level)}</td><td>${photo(h)}</td><td>${h.pts}</td></tr>`).join('')}
     </tbody></table><p class="note">各月小計：${months}</p>`;
 }
 

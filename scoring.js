@@ -105,7 +105,11 @@ export function compute({ players, teams, scores, settings }) {
     if (posted && ms(posted) > ms(submissionDeadline(date))) {
       return void warnings.push(`成績第 ${line} 列：${who} ${dateKey(date)} 逾期上傳，不計分`);
     }
-    records.push({ who, date: dateKey(date), month: `${date.y}-${pad(date.m)}`, pts, level: String(lvl).toUpperCase() });
+    const link = s['Slack訊息連結(選填)'] ?? s['Slack訊息連結'] ?? '';
+    records.push({
+      who, date: dateKey(date), month: `${date.y}-${pad(date.m)}`, pts, level: String(lvl).toUpperCase(),
+      link: /^https?:\/\//i.test(link) ? link : '', // 只接受 http(s) 連結
+    });
   });
 
   // 每人每天只取最高

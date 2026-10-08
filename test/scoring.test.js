@@ -117,3 +117,11 @@ test('CSV：引號、逗號、CRLF、BOM', () => {
   const rows = parseCSV('﻿姓名,備註\r\n"阿強","a,b ""c"""\r\n小明,\r\n');
   assert.deepEqual(rows, [{ 姓名: '阿強', 備註: 'a,b "c"' }, { 姓名: '小明', 備註: '' }]);
 });
+
+test('Slack 連結：保留在紀錄上；非 http(s) 連結被丟棄', () => {
+  const good = { ...S('2026-10-10', '阿強', 'V2'), 'Slack訊息連結(選填)': 'https://x.slack.com/archives/C1/p1' };
+  const bad = { ...S('2026-10-24', '阿強', 'V2'), 'Slack訊息連結(選填)': 'javascript:alert(1)' };
+  const h = run([good, bad]).players.find((p) => p.name === '阿強').history;
+  assert.equal(h[0].link, 'https://x.slack.com/archives/C1/p1');
+  assert.equal(h[1].link, '');
+});
